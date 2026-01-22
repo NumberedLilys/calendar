@@ -9,7 +9,9 @@ This calendar app will have more options and a more user-friendly interface that
 - multiple calenders for personal/friends/family
 - basic calender functions like events and todos
 - be able to reschedule events with more customization ie. reschedule this event every 10 days
-- collaberative calenders
+- collaborative calenders (Family, friends, etc)
+- Task page? (checklist?)
 
 # why?
 - most calanders dont give you the amount of customization needed
+- Having a more accessible and collaborative calendar would make daily tasks more convenient
