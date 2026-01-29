@@ -1,4 +1,9 @@
 #include <iostream>
+#include <chrono>
+#include <ctime>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 class Calendar {
     private:
@@ -20,9 +25,19 @@ class TaskNotifications {
     // Notification class, sends notifications for tasks/events. Put in .h file later
 };
 
-int main() {
-    std::cout << "Hello World" << std::endl;
-    std::cout << "Will have to change this to a calendar project later" << std::endl;
+std::string format_date(std::chrono::system_clock::time_point tp) {
+
+    std::time_t t = std::chrono::system_clock::to_time_t(tp); // changes time_point to time_t
     
+    std::tm* now = std::localtime(&t); // Converts to local time
+
+    std::ostringstream ss;
+    ss << std::put_time(now, "%Y-%m-%d"); // Formats the date in YYYY-MM-DD format using stringstream
+    return ss.str();
+}
+
+int main() {
+    auto now = std::chrono::system_clock::now();
+    std::cout << "Current date: " << format_date(now) << std::endl;
     return 0;
 }
