@@ -14,7 +14,7 @@ class Calendar {
     public:
         Calendar(int y, int m, int d): year(y), month(m), day(d) {};
         void displayDate() {
-            std::cout << "Date: " << year << "-" << month << "-" << day << std::endl;
+            std::cout << "Date: " << day << "-" << month << "-" << year << std::endl;
         }
         // Put into a .h file later, add extra functionalities. Mainly display and basics for the calendar application
         // Figure out how to get the proper date/time, maybe a library?
