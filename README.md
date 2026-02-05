@@ -71,15 +71,18 @@ App is not fully implemented and does not have working backend.
 
 ## Description
 
-- General description
+(Name of program) is a versatile calendar app that implements a multitude of features. I displays the date in a typical calendar format (month, week, date, year) in a rectangular program for users to quickly and easily access the date and see written events.
 
 ### Features
 
-- Features added (e.g. event addition)
+(Name of program) includes all basic calendar features, such as the date, notification implementations, and event planning. Additionally, the calendar gives users the ability to make recurring events with a chosen number of days and times. For example, users will be able to plan events to reoccur every x number of weeks for a certain amount of time. Another feature gives users the ability to make a shared calendar. With this, users can choose between multiple options (family, friends, etc) and allow multiple people to add, delete, and work with events collaboratively.
 
-### Background
-
-- Why we decided to create a calendar
+List of features: 
+    - Date display
+    - Notifications/event reminders
+    - Event creation
+    - Reoccurring events
+    - Shared calendar (Family, friends)
 
 ## Visuals
 
@@ -95,6 +98,7 @@ App is not fully implemented and does not have working backend.
 
 ## Roadmap
 
-- Future updates
+- Task Page
+- Goal Setting
 
 ## Contributing
