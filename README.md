@@ -16,10 +16,12 @@ We will be using c++ framwork with QT for the ui
 
 # build instructions
 
-git clone --recursive https://github.com/NumberedLilys/calendar.git
+1. Clone the repository
+git clone https://github.com/NumberedLilys/calendar.git
 cd calendar
 
-./calendar
+2. Run the pre-compiled executable (Windows)
+./database/"calander project.exe"
 
 there is no need to download anything else
 
