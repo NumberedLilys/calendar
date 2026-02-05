@@ -55,17 +55,17 @@ This calendar app will have more options and a more user-friendly interface that
 - Cloning (how to clone) (?)
 - libraries required to run program
 
-### Requirements
-
-- 
-
 ## Usage
+
+Simply run the .exe file
 
 ## Roadmap
 
 - Future updates
 
 ## Contributing
+
+
 
 ## Limitations
 
