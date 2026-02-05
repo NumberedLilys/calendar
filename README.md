@@ -35,11 +35,11 @@ This calendar app will have more options and a more user-friendly interface that
 
 ## Description
 
-(Name of program) is a versatile calendar app that implements a multitude of features.
+(Name of program) is a versatile calendar app that implements a multitude of features. I displays the date in a typical calendar format (month, week, date, year) in a rectangular program for users to quickly and easily access the date and see written events.
 
 ### Features
 
-(Name of program) includes all basic calendar features, such as the date, notification implementations, and event planning. Additionally, the calendar gives users the ability to make recurring events with a chosen number of days and times. For example, users will be able to plan events to recur every other week for any number of weeks. 
+(Name of program) includes all basic calendar features, such as the date, notification implementations, and event planning. Additionally, the calendar gives users the ability to make recurring events with a chosen number of days and times. For example, users will be able to plan events to reoccur every other week for any number of weeks. 
 
 ### Background
 
@@ -52,6 +52,8 @@ This calendar app will have more options and a more user-friendly interface that
 ## Installation
 
 - How to install the project/step by step
+- Cloning (how to clone) (?)
+- libraries required to run program
 
 ### Requirements
 
