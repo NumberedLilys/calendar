@@ -14,6 +14,39 @@ We will be using c++ framwork with QT for the ui
 - Task page? (checklist?)
 - Goal Setting?
 
+# build instructions
+
+git clone --recursive https://github.com/NumberedLilys/calendar.git
+cd calendar
+
+./calendar
+
+there is no need to download anything else
+
+# project structure
+
+"Calender"
+- ".vscode"
+    - "tasks.json" - needed for automation tasks
+
+- "database"
+    - "calander project.exe" - main .exe file that runs everything
+
+- "ui"
+    - "SLD3.dll" - needed to run .exe file
+    - "userWindow.cpp" - code for the ui
+    - "userWindow.exe" - .exe to make ui pop up
+
+- ".gitignore" - for git to ignore changes to .exe files
+- "calender_project.cpp" - main .cpp file 
+- "README.md"
+
+
+
+# limitations
+
+App is not fully implemented and does not have working backend.
+
 # why?
 - most calanders dont give you the amount of customization needed
 - Having a more accessible and collaborative calendar would make daily tasks more convenient
