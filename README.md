@@ -96,6 +96,7 @@ List of features:
 
 ## Roadmap
 
-- Future updates
+- Task Page
+- Goal Setting
 
 ## Contributing
