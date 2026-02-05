@@ -17,3 +17,49 @@ We will be using c++ framwork with QT for the ui
 # why?
 - most calanders dont give you the amount of customization needed
 - Having a more accessible and collaborative calendar would make daily tasks more convenient
+
+# Name
+
+<details>
+    <summary>Table of Contents<summary>
+    - Description
+        - Features
+        - Background
+    - Visuals
+    - Installation
+        - Requirements
+    - Usage
+    - Roadmap
+    - Contributing
+
+</details>
+
+## Description
+
+- General description
+
+### Features
+
+- Features added (e.g. event addition)
+
+### Background
+
+- Why we decided to create a calendar
+
+## Visuals
+
+- Photos/video of what it does
+
+## Installation
+
+- How to install the project/step by step
+
+### Requirements
+
+## Usage
+
+## Roadmap
+
+- Future updates
+
+## Contributing
