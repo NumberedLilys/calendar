@@ -17,10 +17,10 @@ This calendar app will have more options and a more user-friendly interface that
 - most calanders dont give you the amount of customization needed
 - Having a more accessible and collaborative calendar would make daily tasks more convenient
 
-# Name
+# Calendar Program
 
 <details>
-    <summary>Table of Contents<summary>
+    <summary>Table of Contents</summary>
     - Description
         - Features
         - Background
@@ -35,11 +35,11 @@ This calendar app will have more options and a more user-friendly interface that
 
 ## Description
 
-- General description
+(Name of program) is a versatile calendar app that implements a multitude of features.
 
 ### Features
 
-- Features added (e.g. event addition)
+(Name of program) includes all basic calendar features, such as the date, notification implementations, and event planning. Additionally, the calendar gives users the ability to make recurring events with a chosen number of days and times. For example, users will be able to plan events to recur every other week for any number of weeks. 
 
 ### Background
 
@@ -55,6 +55,8 @@ This calendar app will have more options and a more user-friendly interface that
 
 ### Requirements
 
+- 
+
 ## Usage
 
 ## Roadmap
@@ -62,3 +64,7 @@ This calendar app will have more options and a more user-friendly interface that
 - Future updates
 
 ## Contributing
+
+## Limitations
+
+The program is not entirely functional yet and has yet to have certain applications added
