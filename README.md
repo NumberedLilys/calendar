@@ -82,10 +82,6 @@ List of features:
     - Reoccurring events
     - Shared calendar (Family, friends)
 
-### Background
-
-- Why we decided to create a calendar
-
 ## Visuals
 
 - Photos/video of what it does
