@@ -56,15 +56,21 @@ App is not fully implemented and does not have working backend.
 # Name
 
 <details>
-    <summary>Table of Contents<summary>
+    <summary>Table of Contents</summary>
+
     - Description
         - Features
         - Background
+
     - Visuals
+
     - Installation
         - Requirements
+
     - Usage
+
     - Roadmap
+    
     - Contributing
 
 </details>
