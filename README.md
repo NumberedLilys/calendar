@@ -1,4 +1,4 @@
-# calendar
+# Calendar
 Using c++, we will be creating a calendar app. 
 Most calendar apps that are available for the public tend to have annoying downsides while using them. 
 For example, some calendar apps tend to have minimal options for repeating events (does not have an option for every x number of weeks).
@@ -18,7 +18,7 @@ List of features:
     - Reoccurring events
     - Shared calendar (Family, friends)
 
-# build instructions
+# Build Instructions
 1. Clone the repository
 git clone https://github.com/NumberedLilys/calendar.git
 cd calendar
@@ -26,7 +26,7 @@ cd calendar
 2. Run the pre-compiled executable (Windows)
 ./database/"calander project.exe"
 
-# project structure
+# Project Structure
 ```
 Calendar/
 ├── .vscode/
@@ -46,7 +46,7 @@ The application is currently a Work in Progress (WIP).
 The backend logic for saving data to a permanent database is not yet implemented.
 The UI is in the early stages of SDL3 implementation.
 
-# why?
+# Why?
 - most calanders dont give you the amount of customization needed
 - Having a more accessible and collaborative calendar would make daily tasks more convenient
 
