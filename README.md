@@ -14,41 +14,6 @@ We will be using c++ framwork with QT for the ui
 - Task page? (checklist?)
 - Goal Setting?
 
-# build instructions
-
-1. Clone the repository
-git clone https://github.com/NumberedLilys/calendar.git
-cd calendar
-
-2. Run the pre-compiled executable (Windows)
-./database/"calander project.exe"
-
-there is no need to download anything else
-
-# project structure
-
-"Calender"
-- ".vscode"
-    - "tasks.json" - needed for automation tasks
-
-- "database"
-    - "calander project.exe" - main .exe file that runs everything
-
-- "ui"
-    - "SLD3.dll" - needed to run .exe file
-    - "userWindow.cpp" - code for the ui
-    - "userWindow.exe" - .exe to make ui pop up
-
-- ".gitignore" - for git to ignore changes to .exe files
-- "calender_project.cpp" - main .cpp file 
-- "README.md"
-
-
-
-# limitations
-
-App is not fully implemented and does not have working backend.
-
 # why?
 - most calanders dont give you the amount of customization needed
 - Having a more accessible and collaborative calendar would make daily tasks more convenient
@@ -61,16 +26,13 @@ App is not fully implemented and does not have working backend.
     - Description
         - Features
         - Background
-
     - Visuals
-
     - Installation
         - Requirements
-
+    - Project Structure
     - Usage
-
     - Roadmap
-    
+    - Limitations
     - Contributing
 
 </details>
@@ -96,15 +58,48 @@ List of features:
 
 ## Installation
 
-- How to install the project/step by step
+1. Clone the repository
+git clone https://github.com/NumberedLilys/calendar.git
+cd calendar
+
+2. Run the pre-compiled executable (Windows)
+./database/"calander project.exe"
+
+As all required installations are included in the repository, there is no other required steps to complete.
 
 ### Requirements
+
+## Project Structure
+
+"Calendar"
+- ".vscode"
+    - "tasks.json" - needed for automation tasks
+
+- "database"
+    - "calander project.exe" - main .exe file that runs everything
+
+- "ui"
+    - "SLD3.dll" - needed to run .exe file
+    - "userWindow.cpp" - code for the ui
+    - "userWindow.exe" - .exe to make ui pop up
+
+- ".gitignore" - for git to ignore changes to .exe files
+- "calendar_project.cpp" - main .cpp file
+- "Calendar.h" - Includes Calendar class with displayDate function
+- "users.txt" - Storage for user login/account details
+- "README.md"
 
 ## Usage
 
 ## Roadmap
 
-- Task Page
-- Goal Setting
+    Future implementations include:
+        - Task Page
+        - Goal Setting
+        - Notification System
+
+## Limitations
+
+    App is not fully implemented and does not have working backend.
 
 ## Contributing
