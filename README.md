@@ -1,3 +1,4 @@
+```
 # calendar
 Using c++, we will be creating a calendar app. 
 Most calendar apps that are available for the public tend to have annoying downsides while using them. 
@@ -27,7 +28,6 @@ cd calendar
 ./database/"calander project.exe"
 
 # project structure
-
 Calendar/
 ├── .vscode/
 │   └── tasks.json             # Automation tasks for building the project
@@ -60,6 +60,7 @@ The UI is in the early stages of SDL3 implementation.
 # rough notes / ideas
 - multiple calenders for personal/friends/family
 - basic calendar functions like events and todos
+```
 - be able to reschedule events with more customization ie. reschedule this event every 10 days
 - collaborative calenders (Family, friends, etc)
 - Task page? (checklist?)
