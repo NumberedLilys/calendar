@@ -60,16 +60,11 @@ App is not fully implemented and does not have working backend.
     - Description
         - Features
         - Background
-
     - Visuals
-
     - Installation
         - Requirements
-
     - Usage
-
     - Roadmap
-    
     - Contributing
 
 </details>

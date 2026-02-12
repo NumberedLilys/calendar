@@ -1,3 +1,4 @@
+// Maybe include a list of libraries in a Libraries.h file and just #include "Libraries.h" at top of page?
 // #include <iostream>
 // #include <chrono>
 // #include <ctime>
@@ -5,29 +6,42 @@
 // #include <sstream>
 // #include <iomanip> // All in Calendar.h
 
-// Maybe include a list of libraries in a Libraries.h file and just #include "Libraries.h" at top of page?
-
 #include "Calendar.h"
 
 #include <vector>
 #include <fstream>
 
 
-class TaskNotifications {
-    // Notification class, sends notifications for tasks/events. Put in .h file later
-};
+// class TaskNotifications {
+//     // Notification class, sends notifications for tasks/events. Put in .h file later
+// };
+
+std::string userDetails(std::string& email, std::string& username, std::string& password) { // Function to get user details, will be used for account creation and login eventually
+
+    if (email == "login") { // If user is logging in, only ask for username and password, not email. Email is used as unique identifier for account creation, but not necessary for login.
+        std::cout << "Enter username or email: ";
+        std::getline(std::cin, email);
+        username = ""; // Set username to empty string since it's not needed for login
+
+    } else { // If user is creating account, ask for email, username
+        std::cout << "Enter email: ";
+        std::getline(std::cin, email);
+        std::cout << "Enter username: ";
+        std::getline(std::cin, username);
+    }
+
+    std::cout << "Enter password: ";
+    std::getline(std::cin, password);
+
+    return username + " " + password + " " + email;
+}
 
 std::string createUser() {
     std::string username;
     std::string password;
     std::string email;
 
-    std::cout << "Enter email: ";
-    std::getline(std::cin, email);
-    std::cout << "Enter username: ";
-    std::getline(std::cin, username);
-    std::cout << "Enter password: ";
-    std::getline(std::cin, password);
+    userDetails(email, username, password); // initial account creation, requires email and username and password, with password confirmation.
 
     std::cout << "Please confirm your password: ";
     std::string confirm_password;
@@ -39,8 +53,8 @@ std::string createUser() {
         std::getline(std::cin, confirm_password);
     }
 
-    std::ofstream user_file("users.txt"); // Append user data to file
-    user_file << email << " " << username << " " << password << std::endl;
+    std::ofstream user_file("users.txt"); // Append user data to file in database. File will exist already
+    user_file << email << " " << username << " " << password << std::endl; // Stores data in a file for later retrieval
     user_file.close();
     return "User created successfully!" + username;
 }
@@ -72,10 +86,8 @@ bool userLogin() {
 
     std::string input_username;
     std::string input_password;
-    std::cout << "Enter username or email: ";
-    std::getline(std::cin, input_username);
-    std::cout << "Enter password: ";
-    std::getline(std::cin, input_password);
+    std::string input_email = "login"; // Set email to "login" to indicate that we're logging in, not creating account
+    userDetails(input_email, input_username, input_password); // Get user input for login, only needs username/email and password
 
     for (const User& user : users) {
         if ((user.actual_username == input_username || user.actual_email == input_username) && user.actual_password == input_password) {
