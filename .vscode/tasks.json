@@ -7,11 +7,12 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/src/*.cpp",      
-                "-I${workspaceFolder}/src",           
+                "${workspaceFolder}/src/main.cpp",
+                "${workspaceFolder}/src/calendar_ui.cpp",
+                "-I${workspaceFolder}/src",
                 "-o",
-                "${workspaceFolder}/bin/calendar.exe", 
-                "-lSDL3"                               
+                "${workspaceFolder}/bin/calendar_project.exe",
+                "-lSDL3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
