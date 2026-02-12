@@ -1,6 +1,6 @@
 #include "app_logic.h"
 
-// Helper: Reduces code duplication for setting colors
+// Reduces code duplication for setting colors
 void SetDrawColor(SDL_Renderer* renderer, SDL_Color color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
