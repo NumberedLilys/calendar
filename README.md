@@ -60,11 +60,16 @@ App is not fully implemented and does not have working backend.
     - Description
         - Features
         - Background
+
     - Visuals
+
     - Installation
         - Requirements
+
     - Usage
+
     - Roadmap
+    
     - Contributing
 
 </details>
@@ -117,16 +122,7 @@ The UI is in the early stages of SDL3 implementation.
 ## Visuals
 - Photos/video of what it does
 
-## Installation
-
-- How to install the project/step by step
-
-### Requirements
-
-## Usage
-
 ## Roadmap
-
 - Task Page
 - Goal Setting
 
