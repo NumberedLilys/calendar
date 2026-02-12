@@ -3,7 +3,7 @@
 
 #include <SDL3/SDL.h>
 
-// Style Consistency: Using Structs instead of Macros for better type safety
+// Using Structs instead of Macros
 struct CalendarColors {
     SDL_Color background = {243, 244, 246, 255};
     SDL_Color card       = {255, 255, 255, 255};
@@ -22,7 +22,7 @@ struct AppState {
     float margin = 40.0f;
 };
 
-// Function prototypes for Separation of Concerns
+// Function prototypes
 void RenderBackground(AppState* state);
 void RenderCalendarBody(AppState* state, SDL_FRect* cardRect);
 void RenderHeader(AppState* state, SDL_FRect* cardRect);
