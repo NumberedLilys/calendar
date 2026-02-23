@@ -1,13 +1,3 @@
-// #include <iostream>
-// #include <chrono>
-// #include <ctime>
-// #include <string>
-// #include <sstream>
-
-// #include <iomanip>
-// #include <vector>
-// #include <fstream>
-// #include "Libraries.h"
 
 class Calendar {
     private:
@@ -17,36 +7,45 @@ class Calendar {
 
     public:
         Calendar(int y, int m, int d): year(y), month(m), day(d) {};
-        std::string displayDate(std::chrono::system_clock::time_point tp) {
-            std::time_t t = std::chrono::system_clock::to_time_t(tp); // changes time_point to time_t   
-            std::tm* now = std::localtime(&t); // Converts to local time
 
-            std::ostringstream ss;
-            ss << std::put_time(now, "%Y-%m-%d"); // Formats the date in YYYY-MM-DD format using stringstream
-            return ss.str();
+        void getLoginDetails(std::string& username, 
+                             std::string& password) {
 
-
+            std::cout << "Enter username: ";
+            std::getline(std::cin, username);
+            std::cout << "Enter password: ";
+            std::getline(std::cin, password);
         }
-        // Put into a .h file later, add extra functionalities. Mainly display and basics for the calendar application
-        // Figure out how to get the proper date/time, maybe a library?
-        std::string userDetails(std::string& email, std::string& username, std::string& password) { // Function to get user details, will be used for account creation and login eventually
 
-            if (email == "login") { // If user is logging in, only ask for username and password, not email. Email is used as unique identifier for account creation, but not necessary for login.
-                std::cout << "Enter username or email: ";
-                std::getline(std::cin, email);
-                username = ""; // username empty, login only needs one.
+        void getSignupDetails(std::string& email,
+                              std::string& username,
+                              std::string& password) {
 
-            } else { // If user is creating account, ask for email AND username
+            while (true) {
                 std::cout << "Enter email: ";
                 std::getline(std::cin, email);
+
                 std::cout << "Enter username: ";
                 std::getline(std::cin, username);
+
+                std::cout << "Enter password: ";
+                std::getline(std::cin, password);
+
+                if (!email.empty() && !username.empty() && !password.empty()) {
+                    break;
+                }
+
+                std::cout << "Error: All fields are required.\n\n";
             }
+        }
+        std::string displayDate(std::chrono::system_clock::time_point tp) {
+            std::time_t t = std::chrono::system_clock::to_time_t(tp); // changes time_point to time_t   
+            std::tm now;
+            localtime_s(&now, &t); // Converts to local time
 
-            std::cout << "Enter password: "; // Password input for both login and account creation
-            std::getline(std::cin, password);
-
-            return username + " " + password + " " + email;
+            std::ostringstream ss;
+            ss << std::put_time(&now, "%Y-%m-%d"); // Formats the date in YYYY-MM-DD format using stringstream
+            return ss.str();
         }
 
         std::string createUser() {
@@ -54,7 +53,20 @@ class Calendar {
             std::string password;
             std::string email;
 
-            userDetails(email, username, password); // initial account creation, requires email and username and password, with password confirmation.
+            getSignupDetails(email, username, password); // initial account creation, requires email and username and password, with password confirmation.
+
+            std::ifstream check_file("users.txt");
+            std::string line;
+
+            while(std::getline(check_file, line)) {
+                std::istringstream iss(line);
+                std::string stored_email, stored_username, stored_password;
+                iss >> stored_email >> stored_username >> stored_password;
+
+                if(stored_email == email || stored_username == username) {
+                    return "User already exists.";
+                }
+            }
 
             std::cout << "Please confirm your password: ";
             std::string confirm_password;
@@ -65,11 +77,15 @@ class Calendar {
                 std::cout << "Please confirm your password: ";
                 std::getline(std::cin, confirm_password);
             }
+            std::ofstream user_file("users.txt", std::ios::app);
+            if (!user_file.is_open()) {
+                return "Error opening user file.";
+            }
 
-            std::ofstream user_file("users.txt"); // Append user data to file in database. File will exist already
-            user_file << email << " " << username << " " << password << std::endl; // Stores data in a file for later retrieval
+            user_file << email << " " << username << " " << password << std::endl;
             user_file.close();
-            return "User created successfully!" + username;
+
+            return "User " + username + " created successfully!";
         }
 
         struct User { // Struct to hold user data
@@ -103,8 +119,7 @@ class Calendar {
 
             std::string input_username;
             std::string input_password;
-            std::string input_email = "login"; // Set email to "login" to indicate that we're logging in, not creating account
-            userDetails(input_email, input_username, input_password); // Get user input for login, only needs username/email and password
+            getLoginDetails(input_username, input_password); // Get user input for login, only needs username/email and password
 
             for (const User& user : users) {
                 if ((user.actual_username == input_username || user.actual_email == input_username) && user.actual_password == input_password) {
@@ -113,7 +128,7 @@ class Calendar {
                 }
             }
             
-            std::cout << "Login failed. Please check your username/email and password." << std::endl;
+            std::cout << "Login failed. Please check your username and password." << std::endl;
             return false;
         }
 
