@@ -1,5 +1,6 @@
 #include "CalendarLibraries.h" // All libraries needed in the Calendar.h file and main file
 #include "Calendar.h"
+#include "UserFiles.h"
 
 // class TaskNotifications {
 //     // Notification class, sends notifications for tasks/events. Put in .h file later
@@ -24,10 +25,14 @@ int main() {
         std::string choice;
         std::getline(std::cin, choice);
 
-        if (choice == "1")
-            std::cout << calendar.createUser() << std::endl;
-        else if (choice == "2")
-            calendar.userLogin();
+        if (choice == "1"){
+            UserFiles userFiles("users.txt");
+            std::cout << userFiles.createUser(std::cin, std::cout) << std::endl;
+        }
+        else if (choice == "2"){
+            UserFiles userFiles("users.txt");
+            userFiles.userLogin(std::cin, std::cout);
+        }
         else if (choice == "3")
             break;
     }
