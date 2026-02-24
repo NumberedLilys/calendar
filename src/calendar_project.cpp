@@ -8,17 +8,12 @@
 // };
 
 // Run g++ -std=c++17 calendar_project.cpp UserFiles.cpp TestCases.cpp Calendar.cpp -o calendar_app to compile
-// Then run calendar_app to execute
+// Then run calendar_app to execute // Not working anymore
 
 // OR, using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program
 
 
 int main() {
-
-    TestCases::testCreateUserSuccess();
-    TestCases::testDuplicateUser();
-    TestCases::testLoginSuccess();
-    TestCases::testLoginFail();
 
     auto now = std::chrono::system_clock::now();
     Calendar calendar(2026, 1, 1);
@@ -33,11 +28,11 @@ int main() {
         std::getline(std::cin, choice);
 
         if (choice == "1"){
-            UserFiles userFiles("users.txt");
+            UserFiles userFiles("database/users.txt");
             std::cout << userFiles.createUser(std::cin, std::cout) << std::endl;
         }
         else if (choice == "2"){
-            UserFiles userFiles("users.txt");
+            UserFiles userFiles("database/users.txt");
             userFiles.userLogin(std::cin, std::cout); // eventually redirect to calendar interface after successful login
         }
         else if (choice == "3"){
