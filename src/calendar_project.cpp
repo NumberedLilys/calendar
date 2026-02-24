@@ -7,10 +7,8 @@
 //     // Notification class, sends notifications for tasks/events. Put in .h file later
 // };
 
-// Run g++ -std=c++17 calendar_project.cpp UserFiles.cpp TestCases.cpp Calendar.cpp -o calendar_app to compile
-// Then run calendar_app to execute // Not working anymore
-
-// OR, using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program
+// using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program.
+// E.g. cd calendar, mingw32-make, mingw32-make run in terminal
 
 
 int main() {
