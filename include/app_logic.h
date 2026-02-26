@@ -3,7 +3,8 @@
 
 #include <SDL3/SDL.h>
 
-// Using Structs instead of Macros
+class Calendar; 
+
 struct CalendarColors {
     SDL_Color background = {243, 244, 246, 255};
     SDL_Color card       = {255, 255, 255, 255};
@@ -18,6 +19,7 @@ struct CalendarColors {
 struct AppState {
     SDL_Window* window;
     SDL_Renderer* renderer;
+    Calendar* currentCalendar;
     CalendarColors colors;
     float margin = 40.0f;
 };
