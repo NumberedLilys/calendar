@@ -65,3 +65,4 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight);
 void RenderLoginScreen(AppState* state, SDL_FRect* cardRect);
 
 #endif
+

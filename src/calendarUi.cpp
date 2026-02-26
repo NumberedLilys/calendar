@@ -1,9 +1,18 @@
-#include "app_logic.h"
+#include "appLogic.h"
 #include "calendar.h"
+#include <chrono>
+#include <ctime>
 
 // Reduces code duplication for setting colors
 void SetDrawColor(SDL_Renderer* renderer, SDL_Color color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+}
+
+// Helper to draw larger debug text without changing layout math
+static void DrawTextScaled(SDL_Renderer* renderer, float x, float y, const char* text, float scale) {
+    SDL_SetRenderScale(renderer, scale, scale);
+    SDL_RenderDebugText(renderer, x / scale, y / scale, text);
+    SDL_SetRenderScale(renderer, 1.0f, 1.0f);
 }
 
 void RenderBackground(AppState* state) {
@@ -42,14 +51,7 @@ void RenderHeader(AppState* state, SDL_FRect* cardRect) {
     }
 
     SetDrawColor(state->renderer, state->colors.white);
-    SDL_SetRenderScale(state->renderer, 2.0f, 2.0f);
-    SDL_RenderDebugText(
-        state->renderer,
-        (cardRect->x + 20) / 2,
-        (cardRect->y + 25) / 2,
-        title
-    );
-    SDL_SetRenderScale(state->renderer, 1.0f, 1.0f);
+    DrawTextScaled(state->renderer, cardRect->x + 20, cardRect->y + 25, title, 2.2f);
 }
 
 void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
@@ -60,7 +62,13 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
     // Draw Labels
     SetDrawColor(state->renderer, state->colors.text);
     for (int i = 0; i < 7; i++) {
-        SDL_RenderDebugText(state->renderer, cardRect->x + (i * cellW) + (cellW / 2) - 12, labelY, days[i]);
+        DrawTextScaled(
+            state->renderer,
+            cardRect->x + (i * cellW) + (cellW / 2) - 16,
+            labelY,
+            days[i],
+            1.6f
+        );
     }
 
     // Grid Logic
@@ -69,12 +77,26 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
 
     int startOffset = 0;
     int totalDays = 30;
-    int currentDay = -1;
+
+    // Get actual today's date so we only highlight "today" when viewing the current month/year
+    int todayYear = 0, todayMonth = 0, todayDay = 0;
+    {
+        auto now = std::chrono::system_clock::now();
+        std::time_t t = std::chrono::system_clock::to_time_t(now);
+        std::tm tmNow;
+#ifdef _WIN32
+        localtime_s(&tmNow, &t);
+#else
+        localtime_r(&t, &tmNow);
+#endif
+        todayYear = tmNow.tm_year + 1900;
+        todayMonth = tmNow.tm_mon + 1;
+        todayDay = tmNow.tm_mday;
+    }
 
     if (state->currentCalendar != nullptr) {
         startOffset = state->currentCalendar->getStartDayOfWeek(); // 0 = Sunday
         totalDays = state->currentCalendar->getDaysInMonth();
-        currentDay = state->currentCalendar->getDay();
     }
 
     for (int i = 0; i < 42; i++) {
@@ -90,7 +112,13 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
             SDL_FRect cellRect = { x, y, cellW, cellH };
             SDL_RenderRect(state->renderer, &cellRect);
 
-            if (currentDay != -1 && dayNum == currentDay) {
+            // Highlight only when this cell is actually "today" (same year, month, and day as real today)
+            bool isToday = state->currentCalendar != nullptr
+                && state->currentCalendar->getYear() == todayYear
+                && state->currentCalendar->getMonth() == todayMonth
+                && dayNum == todayDay;
+
+            if (isToday) {
                 SetDrawColor(state->renderer, state->colors.primary);
                 SDL_FRect marker = { x + 5, y + 5, 25, 25 };
                 SDL_RenderFillRect(state->renderer, &marker);
@@ -101,7 +129,7 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
 
             char buf[3];
             SDL_snprintf(buf, sizeof(buf), "%d", dayNum);
-            SDL_RenderDebugText(state->renderer, x + 10, y + 10, buf);
+            DrawTextScaled(state->renderer, x + 10, y + 6, buf, 1.6f);
         }
     }
 }
@@ -117,15 +145,8 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
     SDL_RenderFillRect(state->renderer, &headerRect);
 
     SetDrawColor(state->renderer, state->colors.white);
-    SDL_SetRenderScale(state->renderer, 2.0f, 2.0f);
     const char* title = state->loginModeIsSignup ? "Sign Up" : "Login";
-    SDL_RenderDebugText(
-        state->renderer,
-        (cardRect->x + 20) / 2,
-        (cardRect->y + 25) / 2,
-        title
-    );
-    SDL_SetRenderScale(state->renderer, 1.0f, 1.0f);
+    DrawTextScaled(state->renderer, cardRect->x + 20, cardRect->y + 25, title, 2.2f);
 
     float contentTop = cardRect->y + headerHeight + 40.0f;
     float contentLeft = cardRect->x + 40.0f;
@@ -138,13 +159,13 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
     SetDrawColor(state->renderer, state->loginModeIsSignup ? state->colors.card : state->colors.primary);
     SDL_RenderFillRect(state->renderer, &loginBtn);
     SetDrawColor(state->renderer, state->colors.text);
-    SDL_RenderDebugText(state->renderer, loginBtn.x + 20, loginBtn.y + 12, "Login (1)");
+    DrawTextScaled(state->renderer, loginBtn.x + 22, loginBtn.y + 10, "Login", 1.8f);
 
     // Signup button
     SetDrawColor(state->renderer, state->loginModeIsSignup ? state->colors.primary : state->colors.card);
     SDL_RenderFillRect(state->renderer, &signupBtn);
     SetDrawColor(state->renderer, state->colors.text);
-    SDL_RenderDebugText(state->renderer, signupBtn.x + 15, signupBtn.y + 12, "Sign Up (2)");
+    DrawTextScaled(state->renderer, signupBtn.x + 16, signupBtn.y + 10, "Sign Up", 1.8f);
 
     float fieldTop = contentTop + 70.0f;
     float fieldHeight = 36.0f;
@@ -152,7 +173,7 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
 
     auto drawField = [&](float y, const char* label, const std::string& value, bool focused) {
         SetDrawColor(state->renderer, state->colors.text);
-        SDL_RenderDebugText(state->renderer, contentLeft, y - 18.0f, label);
+        DrawTextScaled(state->renderer, contentLeft, y - 20.0f, label, 1.6f);
 
         SDL_FRect box = { contentLeft, y, fieldWidth, fieldHeight };
         SetDrawColor(state->renderer, state->colors.grid);
@@ -165,7 +186,7 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
         }
 
         SetDrawColor(state->renderer, state->colors.text);
-        SDL_RenderDebugText(state->renderer, box.x + 8.0f, box.y + 10.0f, value.c_str());
+        DrawTextScaled(state->renderer, box.x + 10.0f, box.y + 8.0f, value.c_str(), 1.6f);
     };
 
     if (!state->loginModeIsSignup) {
@@ -181,21 +202,34 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
 
     // Submit hint
     SetDrawColor(state->renderer, state->colors.text);
-    SDL_RenderDebugText(
+    DrawTextScaled(
         state->renderer,
         contentLeft,
         cardRect->y + cardRect->h - 80.0f,
-        "Press ENTER to submit. TAB/up/down to switch fields."
+        "Press ENTER to submit. TAB/up/down to switch fields.",
+        1.4f
     );
 
-    // Auth status message
+    // Auth status message — centered, red for errors / neutral for signup feedback
     if (!state->authMessage.empty()) {
-        SetDrawColor(state->renderer, state->colors.text);
-        SDL_RenderDebugText(
+        // Position near vertical center of the card
+        float msgY = cardRect->y + (cardRect->h * 0.48f);
+        bool isError = (state->authMessage.find("failed") != std::string::npos
+            || state->authMessage.find("Error") != std::string::npos
+            || state->authMessage.find("already") != std::string::npos
+            || state->authMessage.find("invalid") != std::string::npos);
+        if (isError) {
+            SetDrawColor(state->renderer, SDL_Color{ 220, 50, 50, 255 });
+        } else {
+            SetDrawColor(state->renderer, state->colors.text);
+        }
+        DrawTextScaled(
             state->renderer,
             contentLeft,
-            cardRect->y + cardRect->h - 50.0f,
-            state->authMessage.c_str()
+            msgY,
+            state->authMessage.c_str(),
+            1.6f
         );
     }
 }
+

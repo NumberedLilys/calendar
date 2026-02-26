@@ -3,7 +3,7 @@
 #include <chrono>
 #include <ctime>
 #include <sstream>
-#include "app_logic.h"
+#include "appLogic.h"
 #include "calendar.h"
 #include "UserFiles.h"
 
@@ -15,21 +15,7 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight);
 void RenderLoginScreen(AppState* state, SDL_FRect* cardRect);
 
 static void HandleLoginKeyDown(AppState* state, const SDL_KeyboardEvent& keyEvent) {
-    SDL_Keycode key = keyEvent.keysym.sym;
-
-    // Mode toggle: 1 = Login, 2 = Signup
-    if (key == SDLK_1) {
-        state->loginModeIsSignup = false;
-        state->loginActiveField = 0;
-        state->authMessage.clear();
-        return;
-    }
-    if (key == SDLK_2) {
-        state->loginModeIsSignup = true;
-        state->loginActiveField = 0;
-        state->authMessage.clear();
-        return;
-    }
+    SDL_Keycode key = keyEvent.key;
 
     int fieldCount = state->loginModeIsSignup ? 3 : 2;
 
@@ -73,11 +59,13 @@ static void HandleLoginKeyDown(AppState* state, const SDL_KeyboardEvent& keyEven
                << state->loginPasswordInput << "\n";
 
             bool success = uf.userLogin(in, out);
-            state->authMessage = out.str();
             if (success) {
                 state->isLoggedIn = true;
                 state->currentUsername = state->loginIdentifierInput;
                 state->screen = CALENDAR;
+                state->authMessage.clear();
+            } else {
+                state->authMessage = "Login failed. Please check your username and password.";
             }
         } else {
             // Signup flow: email, username, password (+ implicit confirm = password)
@@ -119,7 +107,7 @@ static void HandleCalendarKeyDown(AppState* state, const SDL_KeyboardEvent& keyE
     if (!state->currentCalendar) {
         return;
     }
-    SDL_Keycode key = keyEvent.keysym.sym;
+    SDL_Keycode key = keyEvent.key;
     if (key == SDLK_LEFT) {
         state->currentCalendar->changeMonth(-1);
     } else if (key == SDLK_RIGHT) {
@@ -180,6 +168,71 @@ extern "C" SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 
     if (event->type == SDL_EVENT_QUIT) {
         return SDL_APP_SUCCESS; // This closes the app
+    }
+
+    // Mouse support for login/signup UI
+    if (state->screen == LOGIN && event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+        int w, h;
+        SDL_GetRenderOutputSize(state->renderer, &w, &h);
+
+        SDL_FRect cardRect = {
+            state->margin,
+            state->margin,
+            (float)w - (state->margin * 2),
+            (float)h - (state->margin * 2)
+        };
+
+        float headerHeight = 80.0f;
+        float contentTop = cardRect.y + headerHeight + 40.0f;
+        float contentLeft = cardRect.x + 40.0f;
+
+        SDL_FRect loginBtn = { contentLeft, contentTop, 140.0f, 40.0f };
+        SDL_FRect signupBtn = { contentLeft + 160.0f, contentTop, 140.0f, 40.0f };
+
+        auto pointInRect = [](float x, float y, const SDL_FRect& r) {
+            return x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h;
+        };
+
+        float mx = (float)event->button.x;
+        float my = (float)event->button.y;
+
+        if (pointInRect(mx, my, loginBtn)) {
+            state->loginModeIsSignup = false;
+            state->loginActiveField = 0;
+            state->authMessage.clear();
+        } else if (pointInRect(mx, my, signupBtn)) {
+            state->loginModeIsSignup = true;
+            state->loginActiveField = 0;
+            state->authMessage.clear();
+        } else {
+            // Also allow clicking directly into fields to focus them
+            float fieldTop = contentTop + 70.0f;
+            float fieldHeight = 36.0f;
+            float fieldWidth = cardRect.w - 80.0f;
+
+            SDL_FRect fields[3];
+            int fieldCount = 0;
+
+            if (!state->loginModeIsSignup) {
+                // Login: identifier + password
+                fields[0] = { contentLeft, fieldTop, fieldWidth, fieldHeight };
+                fields[1] = { contentLeft, fieldTop + 60.0f, fieldWidth, fieldHeight };
+                fieldCount = 2;
+            } else {
+                // Signup: email, username, password
+                fields[0] = { contentLeft, fieldTop, fieldWidth, fieldHeight };
+                fields[1] = { contentLeft, fieldTop + 60.0f, fieldWidth, fieldHeight };
+                fields[2] = { contentLeft, fieldTop + 120.0f, fieldWidth, fieldHeight };
+                fieldCount = 3;
+            }
+
+            for (int i = 0; i < fieldCount; ++i) {
+                if (pointInRect(mx, my, fields[i])) {
+                    state->loginActiveField = i;
+                    break;
+                }
+            }
+        }
     }
 
     if (event->type == SDL_EVENT_KEY_DOWN) {
