@@ -2,24 +2,145 @@
 #include <SDL3/SDL_main.h>
 #include <chrono>
 #include <ctime>
+#include <sstream>
 #include "app_logic.h"
-#include "Calendar.h"
+#include "calendar.h"
+#include "UserFiles.h"
 
-// --- Prototypes for your UI functions (lives in calendar_ui.cpp) ---
+// --- Prototypes for your UI functions (implemented in calendar_ui.cpp) ---
 void RenderBackground(AppState* state);
 void RenderCalendarBody(AppState* state, SDL_FRect* cardRect);
 void RenderHeader(AppState* state, SDL_FRect* cardRect);
 void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight);
+void RenderLoginScreen(AppState* state, SDL_FRect* cardRect);
+
+static void HandleLoginKeyDown(AppState* state, const SDL_KeyboardEvent& keyEvent) {
+    SDL_Keycode key = keyEvent.keysym.sym;
+
+    // Mode toggle: 1 = Login, 2 = Signup
+    if (key == SDLK_1) {
+        state->loginModeIsSignup = false;
+        state->loginActiveField = 0;
+        state->authMessage.clear();
+        return;
+    }
+    if (key == SDLK_2) {
+        state->loginModeIsSignup = true;
+        state->loginActiveField = 0;
+        state->authMessage.clear();
+        return;
+    }
+
+    int fieldCount = state->loginModeIsSignup ? 3 : 2;
+
+    // Field navigation
+    if (key == SDLK_TAB || key == SDLK_DOWN) {
+        state->loginActiveField = (state->loginActiveField + 1) % fieldCount;
+        return;
+    }
+    if (key == SDLK_UP) {
+        state->loginActiveField = (state->loginActiveField - 1 + fieldCount) % fieldCount;
+        return;
+    }
+
+    // Determine which string to edit
+    std::string* currentField = nullptr;
+    if (!state->loginModeIsSignup) {
+        if (state->loginActiveField == 0) currentField = &state->loginIdentifierInput;
+        else if (state->loginActiveField == 1) currentField = &state->loginPasswordInput;
+    } else {
+        if (state->loginActiveField == 0) currentField = &state->signupEmailInput;
+        else if (state->loginActiveField == 1) currentField = &state->signupUsernameInput;
+        else if (state->loginActiveField == 2) currentField = &state->signupPasswordInput;
+    }
+
+    if (key == SDLK_BACKSPACE) {
+        if (currentField && !currentField->empty()) {
+            currentField->pop_back();
+        }
+        return;
+    }
+
+    // Submit
+    if (key == SDLK_RETURN || key == SDLK_KP_ENTER) {
+        UserFiles uf("database/users.txt");
+        std::stringstream in;
+        std::ostringstream out;
+
+        if (!state->loginModeIsSignup) {
+            // Login flow: identifier + password
+            in << state->loginIdentifierInput << "\n"
+               << state->loginPasswordInput << "\n";
+
+            bool success = uf.userLogin(in, out);
+            state->authMessage = out.str();
+            if (success) {
+                state->isLoggedIn = true;
+                state->currentUsername = state->loginIdentifierInput;
+                state->screen = CALENDAR;
+            }
+        } else {
+            // Signup flow: email, username, password (+ implicit confirm = password)
+            in << state->signupEmailInput << "\n"
+               << state->signupUsernameInput << "\n"
+               << state->signupPasswordInput << "\n"
+               << state->signupPasswordInput << "\n"; // confirmation
+
+            std::string result = uf.createUser(in, out);
+            state->authMessage = result;
+
+            // After successful signup, return to Login mode so user logs in explicitly
+            if (result.rfind("User ", 0) == 0 && result.find("created successfully") != std::string::npos) {
+                state->loginModeIsSignup = false;
+                state->loginActiveField = 0;
+                state->loginIdentifierInput = state->signupUsernameInput;
+                state->loginPasswordInput.clear();
+                state->signupEmailInput.clear();
+                state->signupUsernameInput.clear();
+                state->signupPasswordInput.clear();
+            }
+        }
+
+        // Clear password fields after attempts
+        state->loginPasswordInput.clear();
+        state->signupPasswordInput.clear();
+        return;
+    }
+
+    // Append printable character input
+    if (currentField) {
+        if (key >= 32 && key <= 126) {
+            currentField->push_back(static_cast<char>(key));
+        }
+    }
+}
+
+static void HandleCalendarKeyDown(AppState* state, const SDL_KeyboardEvent& keyEvent) {
+    if (!state->currentCalendar) {
+        return;
+    }
+    SDL_Keycode key = keyEvent.keysym.sym;
+    if (key == SDLK_LEFT) {
+        state->currentCalendar->changeMonth(-1);
+    } else if (key == SDLK_RIGHT) {
+        state->currentCalendar->changeMonth(1);
+    } else if (key == SDLK_UP) {
+        state->currentCalendar->changeMonth(12);
+    } else if (key == SDLK_DOWN) {
+        state->currentCalendar->changeMonth(-12);
+    }
+}
 
 // 1. INITIALIZE: Runs once at the start
 extern "C" SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         return SDL_APP_FAILURE;
     }
-    
+
     AppState* state = new AppState();
-    
+
     if (!SDL_CreateWindowAndRenderer("Calendar v1.0", 800, 700, SDL_WINDOW_RESIZABLE, &state->window, &state->renderer)) {
+        delete state;
         return SDL_APP_FAILURE;
     }
 
@@ -29,7 +150,7 @@ extern "C" SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     std::tm* parts = std::localtime(&now_c);
 
     // Initialize Calendar logic
-    state->currentCalendar = new Calendar(parts->tm_year + 1900, parts->tm_mon + 1, parts->tm_mday); 
+    state->currentCalendar = new Calendar(parts->tm_year + 1900, parts->tm_mon + 1, parts->tm_mday);
 
     // Initialize UI settings
     state->margin = 40.0f;
@@ -41,17 +162,34 @@ extern "C" SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
     state->colors.shadow = {10, 10, 10, 150};
     state->colors.grid = {60, 60, 65, 255};
 
+    // Start at login screen
+    state->screen = LOGIN;
+    state->isLoggedIn = false;
+    state->loginModeIsSignup = false;
+    state->loginActiveField = 0;
+
     SDL_SetRenderDrawBlendMode(state->renderer, SDL_BLENDMODE_BLEND);
     *appstate = state;
-    
+
     return SDL_APP_CONTINUE;
 }
 
 // 2. EVENTS: Runs whenever you click, resize, or close the window
 extern "C" SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
+    AppState* state = (AppState*)appstate;
+
     if (event->type == SDL_EVENT_QUIT) {
         return SDL_APP_SUCCESS; // This closes the app
     }
+
+    if (event->type == SDL_EVENT_KEY_DOWN) {
+        if (state->screen == LOGIN) {
+            HandleLoginKeyDown(state, event->key);
+        } else if (state->screen == CALENDAR) {
+            HandleCalendarKeyDown(state, event->key);
+        }
+    }
+
     return SDL_APP_CONTINUE;
 }
 
@@ -66,9 +204,14 @@ extern "C" SDL_AppResult SDL_AppIterate(void *appstate) {
 
     // Draw everything
     RenderBackground(state);
-    RenderCalendarBody(state, &cardRect);
-    RenderHeader(state, &cardRect);
-    RenderGrid(state, &cardRect, 80.0f);
+
+    if (state->screen == LOGIN) {
+        RenderLoginScreen(state, &cardRect);
+    } else {
+        RenderCalendarBody(state, &cardRect);
+        RenderHeader(state, &cardRect);
+        RenderGrid(state, &cardRect, 80.0f);
+    }
 
     SDL_RenderPresent(state->renderer);
     return SDL_APP_CONTINUE;
@@ -79,8 +222,8 @@ extern "C" void SDL_AppQuit(void *appstate, SDL_AppResult result) {
     AppState* state = (AppState*)appstate;
     if (state) {
         if (state->currentCalendar) delete state->currentCalendar;
-        SDL_DestroyRenderer(state->renderer);
-        SDL_DestroyWindow(state->window);
+        if (state->renderer) SDL_DestroyRenderer(state->renderer);
+        if (state->window) SDL_DestroyWindow(state->window);
         delete state;
     }
     SDL_Quit();
