@@ -1,4 +1,5 @@
 #include "app_logic.h"
+#include "Calendar.h"
 
 // Reduces code duplication for setting colors
 void SetDrawColor(SDL_Renderer* renderer, SDL_Color color) {
@@ -52,7 +53,7 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
     int startOffset = 4; // Jan 1st 2026 = Thursday
     int totalDays = 31;
 
-    for (int i = 0; i < 42; i++) { // 6 rows * 7 columns
+    for (int i = 0; i < 42; i++) { 
         int dayNum = i + 1 - startOffset;
         if (dayNum >= 1 && dayNum <= totalDays) {
             int row = i / 7;
@@ -65,8 +66,7 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
             SDL_FRect cellRect = { x, y, cellW, cellH };
             SDL_RenderRect(state->renderer, &cellRect);
 
-            // Highlight Today
-            if (dayNum == 29) {
+            if (state->currentCalendar != nullptr && dayNum == state->currentCalendar->getDay()) {
                 SetDrawColor(state->renderer, state->colors.primary);
                 SDL_FRect marker = { x + 5, y + 5, 25, 25 };
                 SDL_RenderFillRect(state->renderer, &marker);
