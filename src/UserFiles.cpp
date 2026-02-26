@@ -53,9 +53,18 @@ std::string UserFiles::createUser(std::istream& in, std::ostream& out) {
             std::string stored_email, stored_username, stored_password;
             iss >> stored_email >> stored_username >> stored_password;
 
-            if (stored_email == email || stored_username == username) {
-                return "User already exists.";
+            if (stored_email == email && stored_username == username && stored_password == password) {
+                return "User already exists. Log in instead.";
             }
+
+            if (stored_email == email) {
+                return "Email already in use. Try a different email.";
+            }
+
+            if (stored_username == username) {
+                return "Username already exists. Try a different username.";
+            }
+
         }
     }
 
