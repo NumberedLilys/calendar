@@ -94,13 +94,6 @@ static void HandleLoginKeyDown(AppState* state, const SDL_KeyboardEvent& keyEven
         state->signupPasswordInput.clear();
         return;
     }
-
-    // Append printable character input
-    if (currentField) {
-        if (key >= 32 && key <= 126) {
-            currentField->push_back(static_cast<char>(key));
-        }
-    }
 }
 
 static void HandleCalendarKeyDown(AppState* state, const SDL_KeyboardEvent& keyEvent) {
@@ -131,6 +124,8 @@ extern "C" SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[]) {
         delete state;
         return SDL_APP_FAILURE;
     }
+
+    SDL_StartTextInput(state->window);
 
     // Get real current date
     auto now = std::chrono::system_clock::now();
@@ -168,6 +163,24 @@ extern "C" SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 
     if (event->type == SDL_EVENT_QUIT) {
         return SDL_APP_SUCCESS; // This closes the app
+    }
+
+    // Support for shift presses like @
+    if (event->type == SDL_EVENT_TEXT_INPUT && state->screen == LOGIN) {
+        std::string* currentField = nullptr;
+        if (!state->loginModeIsSignup) {
+            if (state->loginActiveField == 0) currentField = &state->loginIdentifierInput;
+            else if (state->loginActiveField == 1) currentField = &state->loginPasswordInput;
+        } else {
+            if (state->loginActiveField == 0) currentField = &state->signupEmailInput;
+            else if (state->loginActiveField == 1) currentField = &state->signupUsernameInput;
+            else if (state->loginActiveField == 2) currentField = &state->signupPasswordInput;
+        }
+
+        if (currentField) {
+            // event->text.text contains the actual character typed (e.g., "@")
+            currentField->append(event->text.text);
+        }
     }
 
     // Mouse support for login/signup UI
