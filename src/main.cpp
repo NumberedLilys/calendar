@@ -7,7 +7,7 @@
 #include "calendar.h"
 #include "UserFiles.h"
 
-// --- Prototypes for your UI functions (implemented in calendar_ui.cpp) ---
+// --- UI functions ---
 void RenderBackground(AppState* state);
 void RenderCalendarBody(AppState* state, SDL_FRect* cardRect);
 void RenderHeader(AppState* state, SDL_FRect* cardRect);
