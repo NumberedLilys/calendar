@@ -1,5 +1,5 @@
 #include "CalendarLibraries.h" // All libraries needed in the Calendar.h file and main file
-#include "Calendar.h"
+#include "calendar.h"
 #include "UserFiles.h"
 #include "TestCases.h"
 
@@ -13,13 +13,11 @@
 // to run tests, mingw32-make test in terminal, which compiles test_main.cpp and runs the tests
 
 
-int main() {
+void runConsoleCalendarApp() {
 
     auto now = std::chrono::system_clock::now();
     Calendar calendar(2026, 1, 1);
     std::cout << "Current date: " << calendar.displayDate(now) << std::endl;
-
-    // Create a simple user interface for account creation and login eventually
 
     std::cout << "Welcome to the Calendar App!\nSelect an option:";
     while (true) {
@@ -43,5 +41,4 @@ int main() {
             std::cout << "Invalid choice. Please try again.\n";
         }
     }
-    return 0;
 }
