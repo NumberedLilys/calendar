@@ -8,7 +8,7 @@
 namespace { // create a local namespace to remain internal to this file and avoid conflicts with other files
     const std::string TEST_FILE = "database/test_users.txt";
 
-    void resetTestFile() {
+    void resetTestFile() { // Helper function to reset the test file before each test case
         std::ofstream file(TEST_FILE, std::ios::trunc);
         file.close();
     }
@@ -18,11 +18,12 @@ void TestCases::testCreateUserSuccess() { // tests that a user can be created su
 
     resetTestFile();
 
-    std::istringstream input( 
+    std::istringstream input( // Simulate user input for creating a new user
         "email@test.com\n"
         "user1\n"
         "1234\n"
-        "1234\n"
+        "1234\n"  // Incorrect confirmation password to test the retry mechanism
+        // "1234\n" // Correct confirmation password on second attempt
     );
 
     std::ostringstream output; 
@@ -49,9 +50,9 @@ void TestCases::testDuplicateUser() { // tests that creating a user with an emai
         "1234\n"
     );
 
-    std::ostringstream output; 
+    std::ostringstream output; // Create an output stream to capture the output from createUser
 
-    UserFiles uf(TEST_FILE);
+    UserFiles uf(TEST_FILE); // Create a UserFiles instance with the test file
 
     std::string result = uf.createUser(input, output); // Call createUser with the same user details
 
@@ -61,7 +62,7 @@ void TestCases::testDuplicateUser() { // tests that creating a user with an emai
 void TestCases::testLoginSuccess() { // tests that a user can log in successfully with correct credentials
     
     resetTestFile();
-    std::ofstream file(TEST_FILE);
+    std::ofstream file(TEST_FILE); 
     file << "email@test.com user1 1234\n";
     file.close();
 

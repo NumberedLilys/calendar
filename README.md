@@ -15,14 +15,21 @@ We will be using c++ framwork with QT for the ui
 
 # build instructions
 
+
+// using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program.
+// E.g. cd calendar, mingw32-make, mingw32-make run in terminal
+
+// to run tests, mingw32-make test in terminal, which compiles test_main.cpp and runs the tests
+
 1. Clone the repository
 git clone https://github.com/NumberedLilys/calendar.git
 cd calendar
 
-2. Run the pre-compiled executable (Windows)
-./database/"calander project.exe"
+2. Running the program
+In the terminal, type mingw32-make to compile the program and mingw32-make run to execute the program.
+To run the tests (test-cases), type mingw32-make test in the terminal.
 
-there is no need to download anything else
+There is no need to download anything else.
 
 # project structure
 
