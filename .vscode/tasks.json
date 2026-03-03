@@ -1,31 +1,31 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "Build Calendar Project",
+            "label": "Build Calendar Window App",
             "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
                 "${workspaceFolder}/src/main.cpp",
-                "${workspaceFolder}/src/calendar_ui.cpp",
-                "-I${workspaceFolder}/src",
+                "${workspaceFolder}/src/calendarUi.cpp",
+                "${workspaceFolder}/src/calendar.cpp",
+                "${workspaceFolder}/src/UserFiles.cpp",
+                "-I${workspaceFolder}/include",
+                "-L${workspaceFolder}/bin",
+                "-lSDL3",
                 "-o",
-                "${workspaceFolder}/bin/calendar_project.exe",
-                "-lSDL3"
+                "${workspaceFolder}/bin/calendar.exe"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-            "problemMatcher": [
-                "$gcc"
-            ],
+            "problemMatcher": ["$gcc"],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "detail": "Professional build task for multi-file projects."
+            }
         }
-    ],
-    "version": "2.0.0"
+    ]
 }
