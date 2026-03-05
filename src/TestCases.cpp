@@ -19,10 +19,10 @@ void TestCases::testCreateUserSuccess() { // tests that a user can be created su
     resetTestFile();
 
     std::istringstream input( // Simulate user input for creating a new user
-        "email@test.com\n"
-        "user1\n"
-        "1234\n"
-        "1234\n"
+        "email@test.com"
+        "user1"
+        "1234"
+        "1234"
     );
 
     std::ostringstream output; 
