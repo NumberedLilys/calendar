@@ -7,26 +7,23 @@ on:
     branches: [ "main" ]
 
 jobs:
-  windows_job:
-    runs-on: windows-lastest
+  build:
+    runs-on: ubuntu-latest
 
-    build:
-      runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
 
-      steps:
-      - uses: actions/checkout@v4
+    - name: executable permission
+      run: chmod +x ./tests.exe
 
-      - name: executable permission
-        run: chmod +x ./tests.exe
+    - name: Run tests.exe
+      run: ./tests.exe
 
-      - name: Run tests.exe
-        run: ./tests.exe
+    - name: Install dependencies
+      run: make
 
-      - name: Install dependencies
-        run: make
+    - name: Run check
+      run: make check
 
-      - name: Run check
-        run: make check
-
-      - name: Run distcheck
-        run: make distcheck
+    - name: Run distcheck
+      run: make distcheck
