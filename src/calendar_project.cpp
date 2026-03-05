@@ -13,7 +13,7 @@
 // to run tests, mingw32-make test in terminal, which compiles test_main.cpp and runs the tests
 
 
-void runConsoleCalendarApp() {
+int main() {
 
     auto now = std::chrono::system_clock::now();
     Calendar calendar(2026, 1, 1);
