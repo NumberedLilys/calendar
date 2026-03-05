@@ -8,14 +8,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: configure
-      run: ./configure
+    - name: executable permission
+      run: chmod +x ./tests.exe
+
+    - name: Run tests.exe
+      run: ./tests.exe
 
     - name: Install dependencies
       run: make
