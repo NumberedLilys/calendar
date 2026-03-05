@@ -22,8 +22,7 @@ void TestCases::testCreateUserSuccess() { // tests that a user can be created su
         "email@test.com\n"
         "user1\n"
         "1234\n"
-        "1234\n"  // Incorrect confirmation password to test the retry mechanism
-        // "1234\n" // Correct confirmation password on second attempt
+        "1234\n"
     );
 
     std::ostringstream output; 
