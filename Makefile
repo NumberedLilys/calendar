@@ -3,7 +3,7 @@ CXXFLAGS = -Wall -std=c++17 -Iinclude
 
 # ---- Main Application ----
 app:
-	$(CXX) $(CXXFLAGS) src/calendar_project.cpp src/calendar.cpp src/UserFiles.cpp -o calendarlogic.exe
+	$(CXX) $(CXXFLAGS) src/calendar_project.cpp src/calendar.cpp src/UserFiles.cpp -o calendarlogic.exe -Wl,--subsystem,console
 
 run: app
 	calendarlogic.exe
