@@ -13,7 +13,12 @@ We will be using c++ framwork with QT for the ui
 - Task page? (checklist?)
 - Goal Setting?
 
-# build instructions
+# Usage/Download instruction 
+
+You can also download the latest release, and then unzip the folder and run the calender.exe file.
+Or you can just download the calender.exe.
+
+# Build instructions
 
 // using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program.
 // E.g. cd calendar, mingw32-make, mingw32-make run in terminal
@@ -27,8 +32,6 @@ cd calendar
 2. Running the program
 In the terminal, type mingw32-make to compile the program and mingw32-make run to execute the program.
 To run the tests (test-cases), type mingw32-make test in the terminal.
-
-You can also download the latest release, and then unzip the folder and run the calender.exe file.
 
 # project structure
 
@@ -47,8 +50,6 @@ You can also download the latest release, and then unzip the folder and run the 
 - ".gitignore" - for git to ignore changes to .exe files
 - "calender_project.cpp" - main .cpp file 
 - "README.md"
-
-
 
 # limitations
 
@@ -92,14 +93,6 @@ List of features:
     - Event creation
     - Reoccurring events
     - Shared calendar (Family, friends)
-
-# Build Instructions
-1. Clone the repository
-git clone https://github.com/NumberedLilys/calendar.git
-cd calendar
-
-2. Run the pre-compiled executable (Windows)
-./database/"calander project.exe"
 
 # Project Structure
 ```
