@@ -14,7 +14,6 @@
 
 
 int main() {
-
     auto now = std::chrono::system_clock::now();
     Calendar calendar(2026, 1, 1);
     std::cout << "Current date: " << calendar.displayDate(now) << std::endl;

@@ -15,7 +15,6 @@ We will be using c++ framwork with QT for the ui
 
 # build instructions
 
-
 // using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program.
 // E.g. cd calendar, mingw32-make, mingw32-make run in terminal
 
@@ -29,7 +28,7 @@ cd calendar
 In the terminal, type mingw32-make to compile the program and mingw32-make run to execute the program.
 To run the tests (test-cases), type mingw32-make test in the terminal.
 
-There is no need to download anything else.
+You can also download the latest release, and then unzip the folder and run the calender.exe file.
 
 # project structure
 
