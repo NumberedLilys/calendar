@@ -18,12 +18,9 @@ We will be using c++ framwork with QT for the ui
 You can also download the latest release, and then unzip the folder and run the calender.exe file.
 Or you can just download the calender.exe.
 
+To run the Docker container:
+
 # Build instructions
-
-// using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program.
-// E.g. cd calendar, mingw32-make, mingw32-make run in terminal
-
-// to run tests, mingw32-make test in terminal, which compiles test_main.cpp and runs the tests
 
 1. Clone the repository
 git clone https://github.com/NumberedLilys/calendar.git
