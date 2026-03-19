@@ -4,6 +4,7 @@
   "description": "Using c++, we will be creating a calendar app. \r Most calendar apps that are available for the public tend to have annoying downsides while using them. \r For example, some calendar apps tend to have minimal options for repeating events (does not have an option for every x number of weeks).\r This calendar app will have more options and a more user-friendly interface that makes navigating the app easier.\r We will be using c++ framwork with QT for the ui",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
