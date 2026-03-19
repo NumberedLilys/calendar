@@ -93,7 +93,12 @@ std::string Calendar::getMonthName() const {
 std::string Calendar::displayDate(std::chrono::system_clock::time_point tp) {
     std::time_t t = std::chrono::system_clock::to_time_t(tp);
     std::tm now;
-    localtime_s(&now, &t);
+    
+    #ifdef _WIN32
+    localtime_s(&now, &t);  // Windows takes (Destination, Source)
+    #else
+    localtime_r(&t, &now);  // Linux takes (Source, Destination)
+    #endif
 
     std::ostringstream ss;
     ss << std::put_time(&now, "%Y-%m-%d");
