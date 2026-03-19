@@ -1,22 +1,15 @@
 {
   "name": "calendar",
   "version": "1.0.0",
-  "description": "Using c++, we will be creating a calendar app. \r Most calendar apps that are available for the public tend to have annoying downsides while using them. \r For example, some calendar apps tend to have minimal options for repeating events (does not have an option for every x number of weeks).\r This calendar app will have more options and a more user-friendly interface that makes navigating the app easier.\r We will be using c++ framwork with QT for the ui",
-  "main": "index.js",
-  "scripts": {
-    "start": "node app.js",
+  "description": "Using c++, we will be creating a calendar app. Most calendar apps that are available for the public tend to have annoying downsides while using them. For example, some calendar apps tend to have minimal options for repeating events (does not have an option for every x number of weeks). This calendar app will have more options and a more user-friendly interface that makes navigating the app easier. We will be using c++ framwork with QT for the ui",
+"scripts": {
+    "start": "make && ./calendar",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NumberedLilys/calendar.git"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/NumberedLilys/calendar/issues"
-  },
-  "homepage": "https://github.com/NumberedLilys/calendar#readme"
+  "license": "ISC"
 }
