@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Using c++, we will be creating a calendar app. Most calendar apps that are available for the public tend to have annoying downsides while using them. For example, some calendar apps tend to have minimal options for repeating events (does not have an option for every x number of weeks). This calendar app will have more options and a more user-friendly interface that makes navigating the app easier. We will be using c++ framwork with QT for the ui",
 "scripts": {
-    "start": "make && ./calendar",
+    "start": "g++ -g src/main.cpp src/calendarUi.cpp src/calendar.cpp src/userFiles.cpp -Iinclude -lSDL3 -o calendar_app && ./calendar_app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
