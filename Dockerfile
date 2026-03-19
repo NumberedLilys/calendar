@@ -1,4 +1,4 @@
-FROM node:22-windowsservercore
+FROM node:22
 
 WORKDIR /app
 
