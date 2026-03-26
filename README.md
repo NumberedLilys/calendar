@@ -13,45 +13,6 @@ We will be using c++ framwork with QT for the ui
 - Task page? (checklist?)
 - Goal Setting?
 
-# Usage/Download instruction 
-
-You can also download the latest release, and then unzip the folder and run the calender.exe file.
-Or you can just download the calender.exe.
-
-# Build instructions
-
-1. Clone the repository
-git clone https://github.com/NumberedLilys/calendar.git
-cd calendar
-
-2. Running the program
-In the terminal, type mingw32-make to compile the program and mingw32-make run to execute the program.
-To run the tests (test-cases), type mingw32-make test in the terminal.
-
-3. Download Docker 
-To create the container, run: docker build -t calendar_docker .
-in the terminal
-To run the Docker container:
-In the terminal, type docker run --name calendar_docker (image name)
-
-# project structure
-
-"Calender"
-- ".vscode"
-    - "tasks.json" - needed for automation tasks
-
-- "database"
-    - "calander project.exe" - main .exe file that runs everything
-
-- "ui"
-    - "SLD3.dll" - needed to run .exe file
-    - "userWindow.cpp" - code for the ui
-    - "userWindow.exe" - .exe to make ui pop up
-
-- ".gitignore" - for git to ignore changes to .exe files
-- "calender_project.cpp" - main .cpp file 
-- "README.md"
-
 # limitations
 
 App is not fully implemented and does not have working backend.
@@ -75,6 +36,8 @@ App is not fully implemented and does not have working backend.
         - Requirements
 
     - Usage
+
+    - Benchmark and Profiling
 
     - Roadmap
     
@@ -121,6 +84,33 @@ The UI is in the early stages of SDL3 implementation.
 
 ## Visuals
 - Photos/video of what it does
+
+## Installations
+
+- Only need to download the calendar.exe file.
+
+## Usage/Download instruction 
+
+You can also download the latest release, and then unzip the folder and run the calender.exe file.
+Or you can just download the calendar.exe.
+
+### Build instructions
+
+1. Clone the repository
+git clone https://github.com/NumberedLilys/calendar.git
+cd calendar
+
+2. Running the program
+In the terminal, type mingw32-make to compile the program and mingw32-make run to execute the program.
+To run the tests (test-cases), type mingw32-make test in the terminal.
+
+3. Download Docker 
+To create the container, run: docker build -t calendar_docker .
+in the terminal
+To run the Docker container:
+In the terminal, type docker run --name calendar_docker (image name)
+
+## Benchmark and Profiling
 
 ## Roadmap
 - Task Page
