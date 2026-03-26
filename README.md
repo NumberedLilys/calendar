@@ -112,6 +112,10 @@ In the terminal, type docker run --name calendar_docker (image name)
 
 ## Benchmark and Profiling
 
+For Benchmark and Profiling information, refer to profile.txt.
+We used gprof for the benchmarking.
+The most time consuming part of the program is the UI, which takes abbout 366.9 ms to run. 
+
 ## Roadmap
 - Task Page
 - Goal Setting
