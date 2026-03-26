@@ -18,8 +18,6 @@ We will be using c++ framwork with QT for the ui
 You can also download the latest release, and then unzip the folder and run the calender.exe file.
 Or you can just download the calender.exe.
 
-To run the Docker container:
-
 # Build instructions
 
 1. Clone the repository
@@ -29,6 +27,12 @@ cd calendar
 2. Running the program
 In the terminal, type mingw32-make to compile the program and mingw32-make run to execute the program.
 To run the tests (test-cases), type mingw32-make test in the terminal.
+
+3. Download Docker 
+To create the container, run: docker build -t calendar_docker .
+in the terminal
+To run the Docker container:
+In the terminal, type docker run --name calendar_docker (image name)
 
 # project structure
 
