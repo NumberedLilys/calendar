@@ -12,6 +12,9 @@
 
 // to run tests, mingw32-make test in terminal, which compiles test_main.cpp and runs the tests
 
+// Could add arrows/something visual that can be used to navigate between months/years in the calendar interface
+
+// optimize run-time?
 
 int main() {
     auto now = std::chrono::system_clock::now();
