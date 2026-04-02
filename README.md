@@ -116,7 +116,8 @@ For Benchmark and Profiling information, refer to profile.txt.
 
 We used gprof for the benchmarking.
 
-The most time consuming part of the program is the UI, which takes about 366.9 ms to run. 
+The most time consuming part of the program was the Rendering, which took about 384 ms to run. 
+After adjusting a few redundancies and optimizing some code, we were able to reduce the time it took to render to 259 ms.
 
 ## Roadmap
 - Task Page
