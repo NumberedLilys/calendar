@@ -1,14 +1,23 @@
 #include "appLogic.h"
 #include "calendar.h"
-#include <chrono>
 #include <ctime>
 
-inline void SetDrawColor(SDL_Renderer* renderer, SDL_Color color) {
+static const char* const g_DayStrings[32] = {
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+    "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
+};
+
+static const char* const g_DayNames[7] = {
+    "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"
+};
+
+void SetDrawColor(SDL_Renderer* renderer, SDL_Color color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
 // Helper to draw larger debug text without changing layout math
-static inline void DrawTextScaled(SDL_Renderer* renderer, float x, float y, const char* text, float scale) {
+static void DrawTextScaled(SDL_Renderer* renderer, float x, float y, const char* text, float scale) {
     SDL_SetRenderScale(renderer, scale, scale);
     SDL_RenderDebugText(renderer, x / scale, y / scale, text);
     SDL_SetRenderScale(renderer, 1.0f, 1.0f);
@@ -20,12 +29,10 @@ void RenderBackground(AppState* state) {
 }
 
 void RenderCalendarBody(AppState* state, SDL_FRect* cardRect) {
-    // Draw Shadow
     SDL_FRect shadow = { cardRect->x + 4.0f, cardRect->y + 4.0f, cardRect->w, cardRect->h };
     SetDrawColor(state->renderer, state->colors.shadow);
     SDL_RenderFillRect(state->renderer, &shadow);
 
-    // Draw Main Card
     SetDrawColor(state->renderer, state->colors.card);
     SDL_RenderFillRect(state->renderer, cardRect);
 }
@@ -37,12 +44,9 @@ void RenderHeader(AppState* state, SDL_FRect* cardRect) {
     SetDrawColor(state->renderer, state->colors.primary);
     SDL_RenderFillRect(state->renderer, &headerRect);
 
-    // Title text: dynamic month and year from Calendar
     char title[64];
-
     if (state->currentCalendar != nullptr) {
-        // Use const auto& to prevent potential std::string copy allocations per frame
-        const auto& monthName = state->currentCalendar->getMonthName();
+        std::string monthName = state->currentCalendar->getMonthName();
         SDL_snprintf(title, sizeof(title), "%s %d", monthName.c_str(), state->currentCalendar->getYear());
     } else {
         SDL_snprintf(title, sizeof(title), "Calendar");
@@ -53,36 +57,33 @@ void RenderHeader(AppState* state, SDL_FRect* cardRect) {
 }
 
 void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
-    static const char* days[] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
     float cellW = cardRect->w / 7.0f;
     float labelY = cardRect->y + headerHeight + 20.0f;
 
-    // Draw Labels
     SetDrawColor(state->renderer, state->colors.text);
     for (int i = 0; i < 7; i++) {
         DrawTextScaled(
             state->renderer,
             cardRect->x + (i * cellW) + (cellW * 0.5f) - 16.0f,
             labelY,
-            days[i],
+            g_DayNames[i],
             1.6f
         );
     }
 
-    // Grid Logic
     float gridTop = labelY + 30.0f;
     float cellH = (cardRect->h - (gridTop - cardRect->y) - 20.0f) / 6.0f;
 
     int startOffset = 0;
     int totalDays = 30;
 
+    static Uint64 lastCheckTicks = 0;
     static int todayYear = 0, todayMonth = 0, todayDay = 0;
-    static auto lastTime = std::chrono::system_clock::time_point::min();
-    auto now = std::chrono::system_clock::now();
+    Uint64 currentTicks = SDL_GetTicks();
 
-    if (now - lastTime > std::chrono::seconds(1)) {
-        std::time_t t = std::chrono::system_clock::to_time_t(now);
-        std::tm tmNow;
+    if (lastCheckTicks == 0 || (currentTicks - lastCheckTicks) > 1000) {
+        time_t t = time(NULL);
+        struct tm tmNow;
 #ifdef _WIN32
         localtime_s(&tmNow, &t);
 #else
@@ -91,37 +92,35 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
         todayYear = tmNow.tm_year + 1900;
         todayMonth = tmNow.tm_mon + 1;
         todayDay = tmNow.tm_mday;
-        lastTime = now;
+        lastCheckTicks = currentTicks;
     }
 
     bool isCurrentMonth = false;
     if (state->currentCalendar != nullptr) {
-        startOffset = state->currentCalendar->getStartDayOfWeek(); 
+        startOffset = state->currentCalendar->getStartDayOfWeek();
         totalDays = state->currentCalendar->getDaysInMonth();
-        
-        // Hoist standard year/month checks outside of the loop
         isCurrentMonth = (state->currentCalendar->getYear() == todayYear && 
                           state->currentCalendar->getMonth() == todayMonth);
     }
 
-    SetDrawColor(state->renderer, state->colors.grid);
+    SDL_FRect gridRects[42];
+    int gridCount = 0;
+    
     for (int i = 0; i < 42; i++) {
         int dayNum = i + 1 - startOffset;
         if (dayNum >= 1 && dayNum <= totalDays) {
             int row = i / 7;
             int col = i % 7;
-            SDL_FRect cellRect = { cardRect->x + (col * cellW), gridTop + (row * cellH), cellW, cellH };
-            SDL_RenderRect(state->renderer, &cellRect);
+            gridRects[gridCount++] = { cardRect->x + (col * cellW), gridTop + (row * cellH), cellW, cellH };
         }
     }
 
-    static const char* dayStrings[32] = {
-        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-        "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-        "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
-    };
+    if (gridCount > 0) {
+        SetDrawColor(state->renderer, state->colors.grid);
+        SDL_RenderRects(state->renderer, gridRects, gridCount);
+    }
 
-    // Pass 2: Render highlights and text
+    // Render highlights and text
     for (int i = 0; i < 42; i++) {
         int dayNum = i + 1 - startOffset;
         if (dayNum >= 1 && dayNum <= totalDays && dayNum <= 31) {
@@ -139,7 +138,7 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
                 SetDrawColor(state->renderer, state->colors.text);
             }
 
-            DrawTextScaled(state->renderer, x + 10.0f, y + 6.0f, dayStrings[dayNum], 1.6f);
+            DrawTextScaled(state->renderer, x + 10.0f, y + 6.0f, g_DayStrings[dayNum], 1.6f);
         }
     }
 }
@@ -163,13 +162,11 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
     SDL_FRect loginBtn = { contentLeft, contentTop, 140.0f, 40.0f };
     SDL_FRect signupBtn = { contentLeft + 160.0f, contentTop, 140.0f, 40.0f };
 
-    // Batch drawing rects
     SetDrawColor(state->renderer, state->loginModeIsSignup ? state->colors.card : state->colors.primary);
     SDL_RenderFillRect(state->renderer, &loginBtn);
     SetDrawColor(state->renderer, state->loginModeIsSignup ? state->colors.primary : state->colors.card);
     SDL_RenderFillRect(state->renderer, &signupBtn);
 
-    // Batch drawing rect text
     SetDrawColor(state->renderer, state->colors.text);
     DrawTextScaled(state->renderer, loginBtn.x + 22.0f, loginBtn.y + 10.0f, "Login", 1.8f);
     DrawTextScaled(state->renderer, signupBtn.x + 16.0f, signupBtn.y + 10.0f, "Sign Up", 1.8f);
@@ -217,19 +214,12 @@ void RenderLoginScreen(AppState* state, SDL_FRect* cardRect) {
     );
 
     if (!state->authMessage.empty()) {
-        // STRING OPTIMIZATION: Only parse the string for keywords if it has actually changed
-        static std::string lastCheckedMsg = "";
-        static bool isErrorCached = false;
-
-        if (state->authMessage != lastCheckedMsg) {
-            lastCheckedMsg = state->authMessage;
-            isErrorCached = (lastCheckedMsg.find("failed") != std::string::npos
-                || lastCheckedMsg.find("Error") != std::string::npos
-                || lastCheckedMsg.find("already") != std::string::npos
-                || lastCheckedMsg.find("invalid") != std::string::npos);
-        }
-
-        if (isErrorCached) {
+        bool isError = (state->authMessage.find("failed") != std::string::npos
+            || state->authMessage.find("Error") != std::string::npos
+            || state->authMessage.find("already") != std::string::npos
+            || state->authMessage.find("invalid") != std::string::npos);
+            
+        if (isError) {
             SetDrawColor(state->renderer, SDL_Color{ 220, 50, 50, 255 });
         } else {
             SetDrawColor(state->renderer, state->colors.text);

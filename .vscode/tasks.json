@@ -17,7 +17,6 @@
                 "-lSDL3",
                 "-o",
                 "${workspaceFolder}/bin/calendar.exe",
-                "-pg"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
