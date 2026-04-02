@@ -2,7 +2,6 @@
 #include <iostream>
 
 int main() {
-    // TestCases::testCreateUserSuccess();
     TestCases::testDuplicateUser();
     TestCases::testDuplicateEmail();
     TestCases::testDuplicateUsername();

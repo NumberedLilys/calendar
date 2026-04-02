@@ -14,26 +14,6 @@ namespace { // create a local namespace to remain internal to this file and avoi
     }
 }
 
-// void TestCases::testCreateUserSuccess() { // tests that a user can be created successfully with valid input
-
-//     resetTestFile();
-
-//     std::istringstream input( // Simulate user input for creating a new user
-//         "email@test.com\n"
-//         "user1\n"
-//         "1234\n"
-//         "1234\n"
-//     );
-
-//     std::ostringstream output; 
-
-//     UserFiles uf(TEST_FILE); 
-
-//     std::string result = uf.createUser(input, output); // Call createUser with test input and output streams
-
-//     assert(result == "User user1 created successfully!"); // Check that the result message is correct
-// }
-
 void TestCases::testDuplicateUser() { // tests that creating a user with an email that already exists results in an error message
 
     resetTestFile();
