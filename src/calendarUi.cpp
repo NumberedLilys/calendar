@@ -84,11 +84,7 @@ void RenderGrid(AppState* state, SDL_FRect* cardRect, float headerHeight) {
     if (lastCheckTicks == 0 || (currentTicks - lastCheckTicks) > 1000) {
         time_t t = time(NULL);
         struct tm tmNow;
-#ifdef _WIN32
         localtime_s(&tmNow, &t);
-#else
-        localtime_r(&t, &tmNow);
-#endif
         todayYear = tmNow.tm_year + 1900;
         todayMonth = tmNow.tm_mon + 1;
         todayDay = tmNow.tm_mday;
