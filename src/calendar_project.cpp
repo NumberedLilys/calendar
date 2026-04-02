@@ -3,10 +3,6 @@
 #include "UserFiles.h"
 #include "TestCases.h"
 
-// class TaskNotifications {
-//     // Notification class, sends notifications for tasks/events. Put in .h file later
-// };
-
 // using makefile, mingw32-make to compile in terminal and mingw32-make run to run the program.
 // E.g. cd calendar, mingw32-make, mingw32-make run in terminal
 
@@ -19,9 +15,9 @@
 int main() {
     auto now = std::chrono::system_clock::now();
     Calendar calendar(2026, 1, 1);
-    std::cout << "Current date: " << calendar.displayDate(now) << std::endl;
-
-    std::cout << "Welcome to the Calendar App!\nSelect an option:";
+    std::cout << "Current date: " << calendar.displayDate(now) << std::endl
+    << "Welcome to the Calendar App!\nSelect an option:";
+    
     while (true) {
         std::cout << "\n1. Create Account\n2. Login\n3. Exit\nChoice: ";
         std::string choice;
