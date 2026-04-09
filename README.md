@@ -15,7 +15,9 @@ We will be using c++ framwork with QT for the ui
 
 # limitations
 
-App is not fully implemented and does not have working backend.
+- app is limited in event creation
+- app can not notify you of things
+- official holdifays not implemented
 
 # why?
 - most calanders dont give you the amount of customization needed
@@ -78,12 +80,6 @@ The application is currently a Work in Progress (WIP).
 The backend logic for saving data to a permanent database is not yet implemented.
 The UI is in the early stages of SDL3 implementation.
 
-# Why?
-- most calanders dont give you the amount of customization needed
-- Having a more accessible and collaborative calendar would make daily tasks more convenient
-
-## Visuals
-- Photos/video of what it does
 
 ## Installations
 
@@ -130,3 +126,9 @@ After adjusting a few redundancies and optimizing some code, we were able to red
 - collaborative calenders (Family, friends, etc)
 - Task page? (checklist?)
 - Goal Setting?
+
+# Reflection
+- We have learned many new things that we havent done in previous projects. Such things are: Using docker, Using profilng and benchmarking, and using c++ with other tools to create a seperate window for a User Interface. We also learned how to work with eachother properly using Github, and its correspoding commands. 
+
+# Future 
+- There are many different things we have to work on, mainly event implementation. We want to add all the official holidays such as christamas and halloween. And we want to have the user be able to create their own events.
